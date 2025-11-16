@@ -200,7 +200,7 @@ int main()
             break;
 
         case 6:
-            cout << "\n" << "\033[32m" << "Exiting program." << endl;
+            cout << "\n" << "Exiting program." << endl;
             sentinel = 1;
             break;
 
