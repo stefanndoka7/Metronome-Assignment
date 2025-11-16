@@ -101,6 +101,10 @@ void displayOutput(string& songName, double& minutes, double& seconds, double& b
     cout << "BPM:" << setw(56) << bpm << "\n";
     cout << "Total Beats in Song:" << setw(40) << setprecision(2) << totalBeats << "\n";
     cout << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << lengthofOneBeat << "\n";
+    for (int line = 60; line > 0; line--)
+    {
+        cout << ".";
+    }
 }
 
 int main()
