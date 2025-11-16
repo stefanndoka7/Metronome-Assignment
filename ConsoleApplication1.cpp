@@ -88,7 +88,7 @@ void editingMenu()
 
 }
 
-void displayOutput(string& songName, double& minutes, double& seconds, double& bpm, double& totalBeats, double& lengthofOneBeat)
+void displayOutput(string songName, double minutes, double seconds, double bpm, double totalBeats, double lengthofOneBeat)
 {
     cout << "\033[32m";
 
@@ -122,7 +122,7 @@ int main()
     ofstream outFile;
 
 
-    banner();
+	banner();       //where the program starts running
 
 
     grabSongName(songName);
