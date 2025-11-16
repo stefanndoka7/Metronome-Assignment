@@ -14,7 +14,7 @@ void banner()
     cout << "\033[34m" << "------------------------------------------------------------" << endl;
     cout << "                Welcome to the BPM Calculator     " << endl;
     cout << "------------------------------------------------------------" << endl;
-    cout <<  "Hello!" << "\033[0m" << endl;
+    cout <<  "Hello!!!" << "\033[0m" << endl;
 }
 
 double calculateTotalBeats(double bpm, double songlengthInSeconds)
