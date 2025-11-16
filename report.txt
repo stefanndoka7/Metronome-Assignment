@@ -1,0 +1,6 @@
+Song Name:                                                 1
+Minutes in Song:                                           1
+Seconds in Song:                                           1
+BPM:                                                       1
+Total Beats in Song:                                    1.02
+Length of One Beat (in seconds):                     60.0000
