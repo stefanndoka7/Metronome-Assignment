@@ -152,7 +152,7 @@ int main()
         case 1:
             grabSongName(songName);
 
-            cout << "\n" << "The song name has been updated to: " << songName << "\n";
+            cout << "\n" << "\033[32m" << "The song name has been updated to: " << songName << "\n";
 
             break;
 
@@ -162,7 +162,7 @@ int main()
             lengthofOneBeat = calculateLengthofOneBeat(bpm);
             totalBeats = calculateTotalBeats(bpm, songlengthInSeconds);
 
-            cout << "The bpm has been updated to: " << setprecision(0) << fixed << bpm << "BPM" << "\n";
+            cout << "\033[32m" << "The bpm has been updated to: " << setprecision(0) << fixed << bpm << "BPM" << "\n";
 
             break;
 
@@ -172,7 +172,7 @@ int main()
             songlengthInSeconds = calculateSongLengthInSeconds(minutes, seconds);
             totalBeats = calculateTotalBeats(bpm, songlengthInSeconds);
 
-            cout << "\n" << "The song length has been updated to: " << setprecision(0) << fixed << minutes << " minutes and " << seconds << " seconds.\n";
+            cout << "\n" << "\033[32m" << "The song length has been updated to: " << setprecision(0) << fixed << minutes << " minutes and " << seconds << " seconds.\n";
 
             break;
 
@@ -195,7 +195,7 @@ int main()
             outFile << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << lengthofOneBeat << "\n";
             outFile.close();
 
-            cout << "Output has been saved to Report.txt" << "\n";
+            cout << "\033[32m" << "Output has been saved to Report.txt" << "\n";
 
             break;
 
@@ -205,8 +205,8 @@ int main()
             break;
 
         default:
-            cout << "\n" << "Invalid choice. Exiting program." << endl;
-            return -1;
+            cout << "\n" << "\033[31m" << "Invalid choice. Enter valid input (1-6)." << endl;
+            break;
         }
 
     } while (sentinel == 0);

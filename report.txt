@@ -1,6 +1,6 @@
-Song Name:                                                 1
-Minutes in Song:                                           1
-Seconds in Song:                                           1
+Song Name:                                             table
+Minutes in Song:                                           3
+Seconds in Song:                                           4
 BPM:                                                       1
-Total Beats in Song:                                    1.02
+Total Beats in Song:                                    3.07
 Length of One Beat (in seconds):                     60.0000
