@@ -11,10 +11,10 @@ const int VARIGNORE = 100000;
 
 void banner()
 {
-    cout << "------------------------------------------------------------" << endl;
+    cout << "\033[34m" << "------------------------------------------------------------" << endl;
     cout << "                Welcome to the BPM Calculator     " << endl;
     cout << "------------------------------------------------------------" << endl;
-    cout << "Hello!" << endl;
+    cout <<  "Hello!" << "\033[0m" << endl;
 }
 
 double calculateTotalBeats(double bpm, double songlengthInSeconds)
@@ -38,11 +38,11 @@ double calculateSongLengthInSeconds(double minutes, double seconds)
 double grabBPM()
 {
     double bpm{};
-    cout << "Enter the BPM\n";
+    cout << "\033[34m" << "Enter the BPM\n" << "\033[0m";
     while (true) {
         if (!(cin >> bpm) || (bpm <= 0))      //input validation for bpm
         {
-            cout << "User input was invalid. Please try enter a valid input (any number above 0)." << endl;
+            cout << "\033[31m" << "User input was invalid. Please try enter a valid input (any number above 0)." << "\033[0m" << endl;
             cin.clear();
             cin.ignore(VARIGNORE, '\n');
         }
@@ -54,12 +54,12 @@ double grabBPM()
 
 double grabSongLength(double& minutes, double& seconds)
 {
-    cout << "Enter how many minutes long, and then the remaining seconds\n";
+    cout << "\033[34m" << "Enter how many minutes long, and then the remaining seconds" << "\033[0m" << "\n";
     while (true) {
         if (!(cin >> minutes >> seconds) || (seconds >= 60 || seconds < 0 || minutes < 0))
         {
-            cout << "User input was invalid. Please try entering a valid input" << "\n";
-            cout << "(minutes can be any whole number, and seconds can be any whole number thats less than 60)" << endl;
+            cout << "\033[31m" << "User input was invalid. Please try entering a valid input" << "\n";
+            cout << "(minutes can be any whole number, and seconds can be any whole number thats less than 60)" << "\033[0m" << endl;
             cin.clear();
             cin.ignore(VARIGNORE, '\n');
         }
@@ -71,25 +71,27 @@ double grabSongLength(double& minutes, double& seconds)
 
 int grabSongName(string& songName)
 {
-    cout << "What was the name of the last song you listened to?\n";
+    cout << "\033[34m" << "What was the name of the last song you listened to?\n" << "\033[0m";
     cin >> (songName);
     return 0;
 }
 
 void editingMenu()
 {
-    cout << "\n" << "----EDITING MENU----" << endl;
+    cout << "\n" << "\033[34m" << "----EDITING MENU----" << endl;
     cout << "1) edit song name" << endl;
     cout << "2) edit bpm" << endl;
     cout << "3) edit song length" << endl;
     cout << "4) display output" << endl;
     cout << "5) save output to report.txt" << endl;
-    cout << "6) exit program" << endl;
+    cout << "\033[31m" << "6) exit program" << "\033[0m" << endl;
 
 }
 
 void displayOutput(string& songName, double& minutes, double& seconds, double& bpm, double& totalBeats, double& lengthofOneBeat)
 {
+    cout << "\033[32m";
+
     for (int line = 60; line > 0; line--)
     {
         cout << ".";
