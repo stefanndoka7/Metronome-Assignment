@@ -76,6 +76,37 @@ int grabSongName(string& songName)
     return 0;
 }
 
+int grabMinutesPracticed(int practicingMinutes[], int arraySize)
+{
+    cout << "\033[34m" << "How many minutes have you spent practicng every day this week? Enter 7 values" << "\033[0m" << "\n";
+    for (int i = 0; i < arraySize; i++)
+    {
+        {
+            while (true) {
+                if (!(cin >> practicingMinutes[i]) || (practicingMinutes[i] < 0))
+                {
+                    cout << "\033[31m" << "User input was invalid. Please try enter a valid input (any whole number)." << "\033[0m" << endl;
+                    cin.clear();
+                    cin.ignore(VARIGNORE, '\n');
+                }
+                else
+                    break;
+            }
+        }
+    }
+    return 0;
+}
+
+int totalMinutesPracticed(int practicingMinutes[], int arraySize)
+{
+    int totalMinutes = 0;
+    for (int i = 0; i < arraySize; i++)
+    {
+        totalMinutes += practicingMinutes[i];
+    }
+    return totalMinutes;
+}
+
 void editingMenu()
 {
     cout << "\n" << "\033[34m" << "----EDITING MENU----" << endl;
@@ -88,7 +119,7 @@ void editingMenu()
 
 }
 
-void displayOutput(string songName, double minutes, double seconds, double bpm, double totalBeats, double lengthofOneBeat)
+void displayOutput(string songName, double minutes, double seconds, double bpm, double totalBeats, double lengthofOneBeat, int totalMinutes)
 {
     cout << "\033[32m";
 
@@ -103,7 +134,10 @@ void displayOutput(string songName, double minutes, double seconds, double bpm, 
     cout << "BPM:" << setw(56) << bpm << "\n";
     cout << "Total Beats in Song:" << setw(40) << setprecision(2) << totalBeats << "\n";
     cout << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << lengthofOneBeat << "\n";
+	cout << "Total Minutes Practiced This Week:" << setw(26) << totalMinutes << "\n";
 }
+
+
 
 int main()
 {
@@ -118,12 +152,17 @@ int main()
 
     int choice{};
     int sentinel = 0;
+	int arraySize = 7;
+	int totalMinutes = 0;
+
+    int practicingMinutes[] = {0, 0, 0, 0, 0, 0 ,0};
+
+	enum menuchoice { EDIT_SONG_NAME = 1, EDIT_BPM, EDIT_SONG_LENGTH, DISPLAY_OUTPUT, SAVE_OUTPUT, EXIT_PROGRAM };
 
     ofstream outFile;
 
 
 	banner();       //where the program starts running
-
 
     grabSongName(songName);
 
@@ -131,6 +170,9 @@ int main()
 
     grabSongLength(minutes, seconds);
 
+    grabMinutesPracticed(practicingMinutes, arraySize);
+
+	totalMinutes = totalMinutesPracticed(practicingMinutes, arraySize);
 
     songlengthInSeconds = calculateSongLengthInSeconds(minutes, seconds);
 
@@ -139,7 +181,7 @@ int main()
     lengthofOneBeat = calculateLengthofOneBeat(bpm);
 
 
-    displayOutput(songName, minutes, seconds, bpm, totalBeats, lengthofOneBeat);
+    displayOutput(songName, minutes, seconds, bpm, totalBeats, lengthofOneBeat, totalMinutes);
 
 
 
@@ -149,14 +191,14 @@ int main()
         cin >> choice;
 
         switch (choice) {
-        case 1:
+        case EDIT_SONG_NAME:
             grabSongName(songName);
 
             cout << "\n" << "\033[32m" << "The song name has been updated to: " << songName << "\n";
 
             break;
 
-        case 2:
+        case EDIT_BPM:
             bpm = grabBPM();
 
             lengthofOneBeat = calculateLengthofOneBeat(bpm);
@@ -166,7 +208,7 @@ int main()
 
             break;
 
-        case 3:
+        case EDIT_SONG_LENGTH:
             grabSongLength(minutes, seconds);
 
             songlengthInSeconds = calculateSongLengthInSeconds(minutes, seconds);
@@ -176,15 +218,15 @@ int main()
 
             break;
 
-        case 4:
-            displayOutput(songName, minutes, seconds, bpm, totalBeats, lengthofOneBeat);
+        case DISPLAY_OUTPUT:
+            displayOutput(songName, minutes, seconds, bpm, totalBeats, lengthofOneBeat, totalMinutes);
             for (int line = 60; line > 0; line--)
             {
                 cout << ".";
             }
             break;
 
-        case 5:
+        case SAVE_OUTPUT:
 
             outFile.open(OUTFILENAME);
             outFile << "Song Name:" << setw(50) << songName << "\n";
@@ -193,13 +235,14 @@ int main()
             outFile << "BPM:" << setw(56) << bpm << "\n";
             outFile << "Total Beats in Song:" << setw(40) << setprecision(2) << fixed << totalBeats << "\n";
             outFile << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << lengthofOneBeat << "\n";
+			outFile << "Total Minutes Practiced This Week:" << setw(26) << totalMinutes << "\n";
             outFile.close();
 
-            cout << "\033[32m" << "Output has been saved to Report.txt" << "\n";
+            cout << "\033[32m" << "Output has been saved to report.txt" << "\n";
 
             break;
 
-        case 6:
+        case EXIT_PROGRAM:
             cout << "\n" << "\033[32m" << "Exiting program." << endl;
             sentinel = 1;
             break;

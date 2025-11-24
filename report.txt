@@ -1,6 +1,6 @@
-Song Name:                                                 t
-Minutes in Song:                                           2
-Seconds in Song:                                          40
-BPM:                                                     150
-Total Beats in Song:                                  400.00
-Length of One Beat (in seconds):                      0.4000
+Song Name:                                                 w
+Minutes in Song:                                           5
+Seconds in Song:                                          10
+BPM:                                                     120
+Total Beats in Song:                                  620.00
+Length of One Beat (in seconds):                      0.5000
