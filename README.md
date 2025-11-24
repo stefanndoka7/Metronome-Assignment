@@ -23,3 +23,8 @@ The program then outputs a message that contains the inputs and some new informa
 ## UPDATE 11/16/2025
 
 -added loops and functions to enhance the menu
+
+
+## UPDATE 11/23/2025
+
+-added arrays to the program
