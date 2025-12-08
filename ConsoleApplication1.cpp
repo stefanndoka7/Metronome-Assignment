@@ -3,11 +3,11 @@
 #include <iomanip>
 #include <fstream>
 
-
 using namespace std;
 
 const string OUTFILENAME = "report.txt";
 const int VARIGNORE = 100000;
+const int SONG_COUNT = 2;
 
 void banner()
 {
@@ -110,16 +110,16 @@ int totalMinutesPracticed(int practicingMinutes[], int arraySize)
 void editingMenu()
 {
     cout << "\n" << "\033[34m" << "----EDITING MENU----" << endl;
+    cout << "0) select active song" << endl;
     cout << "1) edit song name" << endl;
     cout << "2) edit bpm" << endl;
     cout << "3) edit song length" << endl;
-    cout << "4) display output" << endl;
-    cout << "5) save output to report.txt" << endl;
+    cout << "4) display output (active song)" << endl;
+    cout << "5) save output to report.txt (all songs)" << endl;
     cout << "\033[31m" << "6) exit program" << "\033[0m" << endl;
-
 }
 
-void displayOutput(string songName, double minutes, double seconds, double bpm, double totalBeats, double lengthofOneBeat, int totalMinutes)
+void displayOutput(const string& songName, double minutes, double seconds, double bpm, double totalBeats, double lengthofOneBeat, int totalMinutes)
 {
     cout << "\033[32m";
 
@@ -134,56 +134,79 @@ void displayOutput(string songName, double minutes, double seconds, double bpm, 
     cout << "BPM:" << setw(56) << bpm << "\n";
     cout << "Total Beats in Song:" << setw(40) << setprecision(2) << totalBeats << "\n";
     cout << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << lengthofOneBeat << "\n";
-	cout << "Total Minutes Practiced This Week:" << setw(26) << totalMinutes << "\n";
+    cout << "Total Minutes Practiced This Week:" << setw(26) << totalMinutes << "\n";
 }
 
+struct song
+{
+    string songName = "";
+    double bpm = 0.0;
+    double minutes = 0.0;
+    double seconds = 0.0;
+    double songlengthInSeconds = 0.0;
+    double totalBeats = 0.0;
+    double lengthofOneBeat = 0.0;
+};
 
+void fillSongStruct(song& mySong)
+{
+    grabSongName(mySong.songName);
+    mySong.bpm = grabBPM();
+    grabSongLength(mySong.minutes, mySong.seconds);
+    mySong.songlengthInSeconds = calculateSongLengthInSeconds(mySong.minutes, mySong.seconds);
+    mySong.totalBeats = calculateTotalBeats(mySong.bpm, mySong.songlengthInSeconds);
+    mySong.lengthofOneBeat = calculateLengthofOneBeat(mySong.bpm);
+}
+
+void fillSongs(song songs[], int count)
+{
+    for (int i = 0; i < count; ++i) {
+        cout << "\nSong entry " << (i + 1) << " of " << count << "\n";
+        fillSongStruct(songs[i]);
+    }
+}
+
+int selectSongIndex(int count)
+{
+    int selection = -1;
+    cout << "\033[34m" << "Select active song (1 - " << count << "): " << "\033[0m";
+    while (true) {
+        if (!(cin >> selection) || selection < 1 || selection > count) {
+            cout << "\033[31m" << "Invalid choice. Enter a number between 1 and " << count << "." << "\033[0m" << endl;
+            cin.clear();
+            cin.ignore(VARIGNORE, '\n');
+        } else {
+            break;
+        }
+    }
+    return selection - 1; // zero-based index
+}
 
 int main()
 {
-    string songName;    //declaring variables, seperated by whether they are input or output
-    double bpm{};
-    double minutes{};
-    double seconds{};
-
-    double songlengthInSeconds{};
-    double totalBeats{};
-    double lengthofOneBeat{};
-
     int choice{};
     int sentinel = 0;
-	int arraySize = 7;
-	int totalMinutes = 0;
-
+    int arraySize = 7;
+    int totalMinutes = 0;
     int practicingMinutes[] = {0, 0, 0, 0, 0, 0 ,0};
 
-	enum menuchoice { EDIT_SONG_NAME = 1, EDIT_BPM, EDIT_SONG_LENGTH, DISPLAY_OUTPUT, SAVE_OUTPUT, EXIT_PROGRAM };
+    enum menuchoice { SELECT_SONG = 0, EDIT_SONG_NAME = 1, EDIT_BPM, EDIT_SONG_LENGTH, DISPLAY_OUTPUT, SAVE_OUTPUT, EXIT_PROGRAM };
 
     ofstream outFile;
 
+    banner();       //where the program starts running
 
-	banner();       //where the program starts running
+    song mySongs[SONG_COUNT];
+    fillSongs(mySongs, SONG_COUNT);
 
-    grabSongName(songName);
-
-    bpm = grabBPM();
-
-    grabSongLength(minutes, seconds);
+    int activeIndex = 0;
+    cout << "\nDefaulting to active song 1. To change active song use menu option 0.\n";
 
     grabMinutesPracticed(practicingMinutes, arraySize);
+    totalMinutes = totalMinutesPracticed(practicingMinutes, arraySize);
 
-	totalMinutes = totalMinutesPracticed(practicingMinutes, arraySize);
-
-    songlengthInSeconds = calculateSongLengthInSeconds(minutes, seconds);
-
-    totalBeats = calculateTotalBeats(bpm, songlengthInSeconds);
-
-    lengthofOneBeat = calculateLengthofOneBeat(bpm);
-
-
-    displayOutput(songName, minutes, seconds, bpm, totalBeats, lengthofOneBeat, totalMinutes);
-
-
+    // Display active song initially
+    displayOutput(mySongs[activeIndex].songName, mySongs[activeIndex].minutes, mySongs[activeIndex].seconds, mySongs[activeIndex].bpm, mySongs[activeIndex].totalBeats, mySongs[activeIndex].lengthofOneBeat, totalMinutes);
 
     do
     {
@@ -191,35 +214,32 @@ int main()
         cin >> choice;
 
         switch (choice) {
+        case SELECT_SONG:
+            activeIndex = selectSongIndex(SONG_COUNT);
+            cout << "\033[32m" << "Active song set to: " << (activeIndex + 1) << "\033[0m" << "\n";
+            break;
+
         case EDIT_SONG_NAME:
-            grabSongName(songName);
-
-            cout << "\n" << "\033[32m" << "The song name has been updated to: " << songName << "\n";
-
+            grabSongName(mySongs[activeIndex].songName);
+            cout << "\n" << "\033[32m" << "The song name has been updated to: " << mySongs[activeIndex].songName << "\n";
             break;
 
         case EDIT_BPM:
-            bpm = grabBPM();
-
-            lengthofOneBeat = calculateLengthofOneBeat(bpm);
-            totalBeats = calculateTotalBeats(bpm, songlengthInSeconds);
-
-            cout << "\033[32m" << "The bpm has been updated to: " << setprecision(0) << fixed << bpm << "BPM" << "\n";
-
+            mySongs[activeIndex].bpm = grabBPM();
+            mySongs[activeIndex].lengthofOneBeat = calculateLengthofOneBeat(mySongs[activeIndex].bpm);
+            mySongs[activeIndex].totalBeats = calculateTotalBeats(mySongs[activeIndex].bpm, mySongs[activeIndex].songlengthInSeconds);
+            cout << "\033[32m" << "The bpm has been updated to: " << setprecision(0) << fixed << mySongs[activeIndex].bpm << "BPM" << "\n";
             break;
 
         case EDIT_SONG_LENGTH:
-            grabSongLength(minutes, seconds);
-
-            songlengthInSeconds = calculateSongLengthInSeconds(minutes, seconds);
-            totalBeats = calculateTotalBeats(bpm, songlengthInSeconds);
-
-            cout << "\n" << "\033[32m" << "The song length has been updated to: " << setprecision(0) << fixed << minutes << " minutes and " << seconds << " seconds.\n";
-
+            grabSongLength(mySongs[activeIndex].minutes, mySongs[activeIndex].seconds);
+            mySongs[activeIndex].songlengthInSeconds = calculateSongLengthInSeconds(mySongs[activeIndex].minutes, mySongs[activeIndex].seconds);
+            mySongs[activeIndex].totalBeats = calculateTotalBeats(mySongs[activeIndex].bpm, mySongs[activeIndex].songlengthInSeconds);
+            cout << "\n" << "\033[32m" << "The song length has been updated to: " << setprecision(0) << fixed << mySongs[activeIndex].minutes << " minutes and " << mySongs[activeIndex].seconds << " seconds.\n";
             break;
 
         case DISPLAY_OUTPUT:
-            displayOutput(songName, minutes, seconds, bpm, totalBeats, lengthofOneBeat, totalMinutes);
+            displayOutput(mySongs[activeIndex].songName, mySongs[activeIndex].minutes, mySongs[activeIndex].seconds, mySongs[activeIndex].bpm, mySongs[activeIndex].totalBeats, mySongs[activeIndex].lengthofOneBeat, totalMinutes);
             for (int line = 60; line > 0; line--)
             {
                 cout << ".";
@@ -227,19 +247,20 @@ int main()
             break;
 
         case SAVE_OUTPUT:
-
             outFile.open(OUTFILENAME);
-            outFile << "Song Name:" << setw(50) << songName << "\n";
-            outFile << "Minutes in Song:" << setw(44) << minutes << "\n";
-            outFile << "Seconds in Song:" << setw(44) << seconds << "\n";
-            outFile << "BPM:" << setw(56) << bpm << "\n";
-            outFile << "Total Beats in Song:" << setw(40) << setprecision(2) << fixed << totalBeats << "\n";
-            outFile << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << lengthofOneBeat << "\n";
-			outFile << "Total Minutes Practiced This Week:" << setw(26) << totalMinutes << "\n";
+            for (int i = 0; i < SONG_COUNT; ++i) {
+                outFile << "Song " << (i + 1) << " Name:" << setw(50) << mySongs[i].songName << "\n";
+                outFile << "Minutes in Song:" << setw(44) << mySongs[i].minutes << "\n";
+                outFile << "Seconds in Song:" << setw(44) << mySongs[i].seconds << "\n";
+                outFile << "BPM:" << setw(56) << mySongs[i].bpm << "\n";
+                outFile << "Total Beats in Song:" << setw(40) << setprecision(2) << fixed << mySongs[i].totalBeats << "\n";
+                outFile << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << mySongs[i].lengthofOneBeat << "\n";
+                outFile << "\n";
+            }
+            outFile << "Total Minutes Practiced This Week:" << setw(26) << totalMinutes << "\n";
             outFile.close();
 
             cout << "\033[32m" << "Output has been saved to report.txt" << "\n";
-
             break;
 
         case EXIT_PROGRAM:
@@ -248,12 +269,11 @@ int main()
             break;
 
         default:
-            cout << "\n" << "\033[31m" << "Invalid choice. Enter valid input (1-6)." << endl;
+            cout << "\n" << "\033[31m" << "Invalid choice. Enter valid input." << endl;
             break;
         }
 
     } while (sentinel == 0);
 
     return 0;
-
 }

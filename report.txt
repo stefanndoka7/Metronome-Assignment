@@ -1,6 +1,22 @@
-Song Name:                                                 w
-Minutes in Song:                                           5
-Seconds in Song:                                          10
-BPM:                                                     120
-Total Beats in Song:                                  620.00
-Length of One Beat (in seconds):                      0.5000
+Song 1 Name:                                   Peace_Sells
+Minutes in Song:                                      4.0000
+Seconds in Song:                                     12.0000
+BPM:                                                140.0000
+Total Beats in Song:                                  588.00
+Length of One Beat (in seconds):                      0.4286
+
+Song 2 Name:                                  Agent_Orange
+Minutes in Song:                                      6.0000
+Seconds in Song:                                      6.0000
+BPM:                                                212.0000
+Total Beats in Song:                                 1293.20
+Length of One Beat (in seconds):                      0.2830
+
+Song 3 Name:                                         song3
+Minutes in Song:                                      2.0000
+Seconds in Song:                                     30.0000
+BPM:                                                100.0000
+Total Beats in Song:                                  250.00
+Length of One Beat (in seconds):                      0.6000
+
+Total Minutes Practiced This Week:                       250
