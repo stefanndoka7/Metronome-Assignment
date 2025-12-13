@@ -81,7 +81,7 @@ class calculate
 
 class practiceTracker
 {
-private:
+
     int practicingMinutes[7];
     static const int arraySize = 7;
 
@@ -90,7 +90,7 @@ private:
         cout << "\033[34m" << "How many minutes have you spent practicng every day this week? Enter 7 values" << "\033[0m" << "\n";
 
         for (int i = 0; i < arraySize; i++)
-        {
+        {   
             while (true) {
                 if (!(cin >> practicingMinutes[i]) || (practicingMinutes[i] < 0))
                 {
@@ -118,7 +118,6 @@ public:
     int total;
 
     practiceTracker()
-        : practicingMinutes{0, 0, 0, 0, 0, 0, 0}, total(0)
     {
         grab();
         total = computeTotalMinutes();
@@ -220,7 +219,6 @@ int main()
     int choice{};
     int sentinel = 0;
     int arraySize = 7;
-    int totalMinutes = 0;
     int practicingMinutes[] = {0, 0, 0, 0, 0, 0 ,0};
 
     enum menuchoice { SELECT_SONG, EDIT_SONG_NAME, EDIT_BPM, EDIT_SONG_LENGTH, DISPLAY_OUTPUT, SAVE_OUTPUT, EXIT_PROGRAM };
@@ -236,11 +234,10 @@ int main()
     cout << "\nDefaulting to active song 1. To change active song use menu option 0.\n";
 
 	practiceTracker myPracticeTracker;
-    totalMinutes = myPracticeTracker.total;
 
 
     // Display active song initially
-    display().output(songsArray[activeIndex].songName, songsArray[activeIndex].minutes, songsArray[activeIndex].seconds, songsArray[activeIndex].bpm, songsArray[activeIndex].totalBeats, songsArray[activeIndex].lengthofOneBeat, totalMinutes);
+    display().output(songsArray[activeIndex].songName, songsArray[activeIndex].minutes, songsArray[activeIndex].seconds, songsArray[activeIndex].bpm, songsArray[activeIndex].totalBeats, songsArray[activeIndex].lengthofOneBeat, myPracticeTracker.total);
     
     do
     {
@@ -288,7 +285,7 @@ int main()
 
         case DISPLAY_OUTPUT:
             
-            display().output(songsArray[activeIndex].songName, songsArray[activeIndex].minutes, songsArray[activeIndex].seconds, songsArray[activeIndex].bpm, songsArray[activeIndex].totalBeats, songsArray[activeIndex].lengthofOneBeat, totalMinutes);
+            display().output(songsArray[activeIndex].songName, songsArray[activeIndex].minutes, songsArray[activeIndex].seconds, songsArray[activeIndex].bpm, songsArray[activeIndex].totalBeats, songsArray[activeIndex].lengthofOneBeat, myPracticeTracker.total);
             
             for (int line = 60; line > 0; line--)
             {
@@ -309,7 +306,7 @@ int main()
                 outFile << "Length of One Beat (in seconds):" << setw(28) << setprecision(4) << songsArray[i].lengthofOneBeat << "\n";
                 outFile << "\n";
             }
-            outFile << "Total Minutes Practiced This Week:" << setw(26) << totalMinutes << "\n";
+            outFile << "Total Minutes Practiced This Week:" << setw(26) << myPracticeTracker.total << "\n";
             outFile.close();
 
             cout << "\033[32m" << "Output has been saved to " << OUTFILENAME << "\n";
